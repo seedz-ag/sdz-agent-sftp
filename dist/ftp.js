@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const ssh2_sftp_client_1 = __importDefault(require("ssh2-sftp-client"));
-const common_1 = require("common");
+const sdz_agent_common_1 = require("sdz-agent-common");
 class FTP {
     constructor(config) {
         this.config = config;
@@ -23,7 +23,7 @@ class FTP {
             return true;
         }
         catch (e) {
-            common_1.Logger.error("CONFIGURAÇÕES FTP INVÁLIDAS.");
+            sdz_agent_common_1.Logger.error("CONFIGURAÇÕES FTP INVÁLIDAS.");
             process.exit(1);
         }
     }
@@ -40,7 +40,7 @@ class FTP {
             })
                 .catch((err) => {
                 console.log(err);
-                common_1.Logger.error(`ERRO AO ENVIAR ${remoteFileName} FTP.`);
+                sdz_agent_common_1.Logger.error(`ERRO AO ENVIAR ${remoteFileName} FTP.`);
                 process.exit(1);
             });
             complete = true;
