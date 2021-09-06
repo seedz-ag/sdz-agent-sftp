@@ -2,7 +2,7 @@ import SFTPClient from "ssh2-sftp-client";
 
 import { ConfigAuthFTP, FTPInterface } from "sdz-agent-types";
 
-import { Logger } from "common";
+import { Logger } from "sdz-agent-common";
 
 class FTP implements FTPInterface {
   private client: SFTPClient;
