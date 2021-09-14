@@ -38,9 +38,6 @@ class FTP implements FTPInterface {
     try {
       await this.client
         .fastPut(localFileName, remoteFileName)
-        .then(() => {
-          return this.disconnect();
-        })
         .catch((err: any) => {
           console.log(err);
           Logger.error(`ERRO AO ENVIAR ${remoteFileName} FTP.`);

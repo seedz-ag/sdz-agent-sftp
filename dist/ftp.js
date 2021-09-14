@@ -35,9 +35,6 @@ class FTP {
         try {
             await this.client
                 .fastPut(localFileName, remoteFileName)
-                .then(() => {
-                return this.disconnect();
-            })
                 .catch((err) => {
                 console.log(err);
                 sdz_agent_common_1.Logger.error(`ERRO AO ENVIAR ${remoteFileName} FTP.`);
