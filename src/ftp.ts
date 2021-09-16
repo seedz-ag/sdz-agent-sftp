@@ -9,8 +9,8 @@ class FTP implements FTPInterface {
   private config: ConfigAuthFTP;
   constructor(config: ConfigAuthFTP) {
     this.config = config;
-    if (this.config.debug) {
-      this.config.debug = (msg:string) => Logger.info(msg);
+    if (process.env.DEBUG) {
+      (msg: string) => Logger.info(msg);
     }
     this.client = new SFTPClient();
   }
@@ -41,6 +41,9 @@ class FTP implements FTPInterface {
     try {
       await this.client
         .fastPut(localFileName, remoteFileName)
+        .then(() => {
+          this.disconnect();
+        })
         .catch((err: any) => {
           console.log(err);
           Logger.error(`ERRO AO ENVIAR ${remoteFileName} FTP.`);

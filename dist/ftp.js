@@ -8,6 +8,9 @@ const sdz_agent_common_1 = require("sdz-agent-common");
 class FTP {
     constructor(config) {
         this.config = config;
+        if (process.env.DEBUG) {
+            (msg) => sdz_agent_common_1.Logger.info(msg);
+        }
         this.client = new ssh2_sftp_client_1.default();
     }
     async connect() {
@@ -35,6 +38,9 @@ class FTP {
         try {
             await this.client
                 .fastPut(localFileName, remoteFileName)
+                .then(() => {
+                this.disconnect();
+            })
                 .catch((err) => {
                 console.log(err);
                 sdz_agent_common_1.Logger.error(`ERRO AO ENVIAR ${remoteFileName} FTP.`);
