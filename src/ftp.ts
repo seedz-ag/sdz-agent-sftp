@@ -9,6 +9,9 @@ class FTP implements FTPInterface {
   private config: ConfigAuthFTP;
   constructor(config: ConfigAuthFTP) {
     this.config = config;
+    if (this.config.debug) {
+      this.config.debug = (msg:string) => Logger.info(msg);
+    }
     this.client = new SFTPClient();
   }
   async connect() {
