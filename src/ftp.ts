@@ -4,6 +4,8 @@ import { ConfigAuthFTP, FTPInterface } from "sdz-agent-types";
 
 import { Logger } from "sdz-agent-common";
 
+import cliProgress from "cli-progress";
+import chalk from "chalk";
 class FTP implements FTPInterface {
   private client: SFTPClient;
   private config: ConfigAuthFTP;
@@ -39,9 +41,23 @@ class FTP implements FTPInterface {
   ): Promise<boolean> {
     let complete = false;
     try {
+      const barProgress = new cliProgress.SingleBar(
+        {
+          format:
+            chalk.green("{bar}") + "| {percentage}% || {value}/{total} Kb",
+        },
+        cliProgress.Presets.shades_classic
+      );
       await this.client
-        .fastPut(localFileName, remoteFileName)
+        .fastPut(localFileName, remoteFileName, {
+          step: function (total_transferred, chunk, total) {
+            barProgress.start(total, 0);
+            barProgress.increment();
+            barProgress.update(total_transferred);
+          },
+        })
         .then(() => {
+          barProgress.stop();
           this.client.end();
         })
         .catch((err: any) => {

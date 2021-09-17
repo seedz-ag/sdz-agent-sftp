@@ -8,11 +8,14 @@
     "build": "tsc --declaration"
   },
   "dependencies": {
+    "chalk": "^4.1.2",
+    "cli-progress": "^3.9.1",
     "sdz-agent-common": "https://github.com/seedz-ag/sdz-agent-common.git",
-    "ssh2-sftp-client": "^7.0.1",
-    "sdz-agent-types": "https://github.com/seedz-ag/sdz-agent-types.git"
+    "sdz-agent-types": "https://github.com/seedz-ag/sdz-agent-types.git",
+    "ssh2-sftp-client": "^7.0.1"
   },
   "devDependencies": {
+    "@types/cli-progress": "^3.9.2",
     "@types/node": "^16.6.1",
     "@types/shelljs": "^0.8.9",
     "@types/ssh2-sftp-client": "^5.3.2"

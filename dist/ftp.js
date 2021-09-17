@@ -5,6 +5,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const ssh2_sftp_client_1 = __importDefault(require("ssh2-sftp-client"));
 const sdz_agent_common_1 = require("sdz-agent-common");
+const cli_progress_1 = __importDefault(require("cli-progress"));
+const chalk_1 = __importDefault(require("chalk"));
 class FTP {
     constructor(config) {
         this.config = config;
@@ -36,9 +38,19 @@ class FTP {
     async sendFile(localFileName, remoteFileName) {
         let complete = false;
         try {
+            const barProgress = new cli_progress_1.default.SingleBar({
+                format: chalk_1.default.green("{bar}") + "| {percentage}% || {value}/{total} Kb",
+            }, cli_progress_1.default.Presets.shades_classic);
             await this.client
-                .fastPut(localFileName, remoteFileName)
+                .fastPut(localFileName, remoteFileName, {
+                step: function (total_transferred, chunk, total) {
+                    barProgress.start(total, 0);
+                    barProgress.increment();
+                    barProgress.update(total_transferred);
+                },
+            })
                 .then(() => {
+                barProgress.stop();
                 this.client.end();
             })
                 .catch((err) => {
