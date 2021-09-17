@@ -39,7 +39,7 @@ class FTP {
             await this.client
                 .fastPut(localFileName, remoteFileName)
                 .then(() => {
-                this.disconnect();
+                this.client.end();
             })
                 .catch((err) => {
                 console.log(err);
