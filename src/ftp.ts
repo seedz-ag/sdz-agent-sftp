@@ -39,14 +39,22 @@ class FTP implements FTPInterface {
   ): Promise<boolean> {
     let complete = false;
     try {
-      const barProgress = ProgressBar.get(localFileName);
       await this.client
         .fastPut(localFileName, remoteFileName, {
           step: function (total_transferred, chunk, total) {
-            if (barProgress) {
-              barProgress.update(total_transferred, {
+            if (total_transferred < total) {
+              ProgressBar.update(localFileName, total_transferred, {
                 color: `\u001b[33m`,
-                event: "TESTE",
+                event: "SENDING",
+                unit: "Kb",
+                count: `${total_transferred}/${total}`,
+              });
+            } else {
+              ProgressBar.update(localFileName, total_transferred, {
+                color: `\u001b[32m`,
+                event: "DONE",
+                value: total,
+                count: `${total_transferred}/${total}`,
               });
             }
           },

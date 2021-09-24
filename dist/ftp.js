@@ -36,14 +36,23 @@ class FTP {
     async sendFile(localFileName, remoteFileName) {
         let complete = false;
         try {
-            const barProgress = sdz_agent_common_1.ProgressBar.get(localFileName);
             await this.client
                 .fastPut(localFileName, remoteFileName, {
                 step: function (total_transferred, chunk, total) {
-                    if (barProgress) {
-                        barProgress.update(total_transferred, {
+                    if (total_transferred < total) {
+                        sdz_agent_common_1.ProgressBar.update(localFileName, total_transferred, {
                             color: `\u001b[33m`,
-                            event: "TESTE",
+                            event: "SENDING",
+                            unit: "Kb",
+                            count: `${total_transferred}/${total}`,
+                        });
+                    }
+                    else {
+                        sdz_agent_common_1.ProgressBar.update(localFileName, total_transferred, {
+                            color: `\u001b[32m`,
+                            event: "DONE",
+                            value: total,
+                            count: `${total_transferred}/${total}`,
                         });
                     }
                 },
