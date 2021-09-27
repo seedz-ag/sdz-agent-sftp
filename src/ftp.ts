@@ -47,14 +47,18 @@ class FTP implements FTPInterface {
                 color: `\u001b[33m`,
                 event: "SENDING",
                 unit: "Kb",
-                count: `${total_transferred}/${total}`,
+                count: `${Math.round(total_transferred / 8000)}/${Math.round(
+                  total / 8000
+                )}`,
               });
             } else {
               ProgressBar.update(localFileName, total_transferred, {
                 color: `\u001b[32m`,
                 event: "DONE",
                 value: total,
-                count: `${total_transferred}/${total}`,
+                count: `${Math.round(total_transferred / 8000)}/${Math.round(
+                  total / 8000
+                )}`,
               });
             }
           },

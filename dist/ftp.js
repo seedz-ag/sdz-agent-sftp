@@ -44,7 +44,7 @@ class FTP {
                             color: `\u001b[33m`,
                             event: "SENDING",
                             unit: "Kb",
-                            count: `${total_transferred}/${total}`,
+                            count: `${Math.round(total_transferred / 8000)}/${Math.round(total / 8000)}`,
                         });
                     }
                     else {
@@ -52,7 +52,7 @@ class FTP {
                             color: `\u001b[32m`,
                             event: "DONE",
                             value: total,
-                            count: `${total_transferred}/${total}`,
+                            count: `${Math.round(total_transferred / 8000)}/${Math.round(total / 8000)}`,
                         });
                     }
                 },
