@@ -40,20 +40,24 @@ class FTP {
                 .fastPut(localFileName, remoteFileName, {
                 step: function (total_transferred, chunk, total) {
                     if (total_transferred < total) {
-                        sdz_agent_common_1.ProgressBar.update(localFileName, total_transferred, {
-                            color: `\u001b[33m`,
-                            event: "SENDING",
-                            unit: "Kb",
-                            count: `${Math.round(total_transferred / 8000)}/${Math.round(total / 8000)}`,
-                        });
+                        if (!process.env.COMMAND_LINE) {
+                            sdz_agent_common_1.ProgressBar.update(localFileName, total_transferred, {
+                                color: `\u001b[33m`,
+                                event: "SENDING",
+                                unit: "Kb",
+                                count: `${Math.round(total_transferred / 8000)}/${Math.round(total / 8000)}`,
+                            });
+                        }
                     }
                     else {
-                        sdz_agent_common_1.ProgressBar.update(localFileName, total_transferred, {
-                            color: `\u001b[32m`,
-                            event: "DONE",
-                            value: total,
-                            count: `${Math.round(total_transferred / 8000)}/${Math.round(total / 8000)}`,
-                        });
+                        if (!process.env.COMMAND_LINE) {
+                            sdz_agent_common_1.ProgressBar.update(localFileName, total_transferred, {
+                                color: `\u001b[32m`,
+                                event: "DONE",
+                                value: total,
+                                count: `${Math.round(total_transferred / 8000)}/${Math.round(total / 8000)}`,
+                            });
+                        }
                     }
                 },
             })

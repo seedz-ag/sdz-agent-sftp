@@ -43,23 +43,27 @@ class FTP implements FTPInterface {
         .fastPut(localFileName, remoteFileName, {
           step: function (total_transferred, chunk, total) {
             if (total_transferred < total) {
-              ProgressBar.update(localFileName, total_transferred, {
-                color: `\u001b[33m`,
-                event: "SENDING",
-                unit: "Kb",
-                count: `${Math.round(total_transferred / 8000)}/${Math.round(
-                  total / 8000
-                )}`,
-              });
+              if (!process.env.COMMAND_LINE) {
+                ProgressBar.update(localFileName, total_transferred, {
+                  color: `\u001b[33m`,
+                  event: "SENDING",
+                  unit: "Kb",
+                  count: `${Math.round(total_transferred / 8000)}/${Math.round(
+                    total / 8000
+                  )}`,
+                });
+              }
             } else {
-              ProgressBar.update(localFileName, total_transferred, {
-                color: `\u001b[32m`,
-                event: "DONE",
-                value: total,
-                count: `${Math.round(total_transferred / 8000)}/${Math.round(
-                  total / 8000
-                )}`,
-              });
+              if (!process.env.COMMAND_LINE) {
+                ProgressBar.update(localFileName, total_transferred, {
+                  color: `\u001b[32m`,
+                  event: "DONE",
+                  value: total,
+                  count: `${Math.round(total_transferred / 8000)}/${Math.round(
+                    total / 8000
+                  )}`,
+                });
+              }
             }
           },
         })
