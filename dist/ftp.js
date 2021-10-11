@@ -11,13 +11,14 @@ class FTP {
         if (process.env.DEBUG) {
             (msg) => sdz_agent_common_1.Logger.info(msg);
         }
-        this.client = new ssh2_sftp_client_1.default();
     }
     async connect() {
         try {
-            await this.client
+            const client = this.getClient();
+            client
                 .connect(this.config)
                 .then(() => {
+                client.end();
                 return true;
             })
                 .catch((e) => {
@@ -30,13 +31,15 @@ class FTP {
             process.exit(1);
         }
     }
-    async disconnect() {
-        await this.client.end();
+    getClient() {
+        return new ssh2_sftp_client_1.default();
     }
     async sendFile(localFileName, remoteFileName) {
         let complete = false;
         try {
-            await this.client
+            const client = this.getClient();
+            await client.connect(this.config);
+            client
                 .fastPut(localFileName, remoteFileName, {
                 step: function (total_transferred, chunk, total) {
                     if (total_transferred < total) {
@@ -61,9 +64,7 @@ class FTP {
                     }
                 },
             })
-                .then(() => {
-                this.client.end();
-            })
+                .then(client.end)
                 .catch((err) => {
                 console.log(err);
                 sdz_agent_common_1.Logger.error(`ERRO AO ENVIAR ${remoteFileName} FTP.`);
@@ -79,11 +80,8 @@ class FTP {
     async getFile(remoteFileName, localFileName) {
         let complete = false;
         try {
-            await this.client
+            this.getClient()
                 .fastGet(remoteFileName, localFileName)
-                .then(() => {
-                return this.disconnect();
-            })
                 .catch((err) => {
                 console.error(err.message);
             });

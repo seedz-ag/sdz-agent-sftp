@@ -5,20 +5,21 @@ import { ConfigAuthFTP, FTPInterface } from "sdz-agent-types";
 import { Logger, ProgressBar } from "sdz-agent-common";
 
 class FTP implements FTPInterface {
-  private client: SFTPClient;
   private config: ConfigAuthFTP;
   constructor(config: ConfigAuthFTP) {
     this.config = config;
     if (process.env.DEBUG) {
       (msg: string) => Logger.info(msg);
     }
-    this.client = new SFTPClient();
   }
+
   async connect() {
     try {
-      await this.client
+      const client = this.getClient();
+      client
         .connect(this.config)
         .then(() => {
+          client.end();
           return true;
         })
         .catch((e: any) => {
@@ -30,16 +31,20 @@ class FTP implements FTPInterface {
       process.exit(1);
     }
   }
-  async disconnect() {
-    await this.client.end();
+
+  getClient() {
+    return new SFTPClient();
   }
+
   async sendFile(
     localFileName: string,
     remoteFileName: string
   ): Promise<boolean> {
     let complete = false;
     try {
-      await this.client
+      const client = this.getClient();
+      await client.connect(this.config);
+      client
         .fastPut(localFileName, remoteFileName, {
           step: function (total_transferred, chunk, total) {
             if (total_transferred < total) {
@@ -67,9 +72,7 @@ class FTP implements FTPInterface {
             }
           },
         })
-        .then(() => {
-          this.client.end();
-        })
+        .then(client.end)
         .catch((err: any) => {
           console.log(err);
           Logger.error(`ERRO AO ENVIAR ${remoteFileName} FTP.`);
@@ -88,11 +91,8 @@ class FTP implements FTPInterface {
   ): Promise<boolean> {
     let complete = false;
     try {
-      await this.client
+      this.getClient()
         .fastGet(remoteFileName, localFileName)
-        .then(() => {
-          return this.disconnect();
-        })
         .catch((err: any) => {
           console.error(err.message);
         });

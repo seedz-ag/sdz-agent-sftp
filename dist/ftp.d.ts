@@ -1,10 +1,10 @@
+import SFTPClient from "ssh2-sftp-client";
 import { ConfigAuthFTP, FTPInterface } from "sdz-agent-types";
 declare class FTP implements FTPInterface {
-    private client;
     private config;
     constructor(config: ConfigAuthFTP);
     connect(): Promise<boolean>;
-    disconnect(): Promise<void>;
+    getClient(): SFTPClient;
     sendFile(localFileName: string, remoteFileName: string): Promise<boolean>;
     getFile(remoteFileName: string, localFileName: string): Promise<boolean>;
 }
