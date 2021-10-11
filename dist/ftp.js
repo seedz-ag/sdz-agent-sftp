@@ -15,7 +15,7 @@ class FTP {
     async connect() {
         try {
             const client = this.getClient();
-            client
+            await client
                 .connect(this.config)
                 .then(() => {
                 client.end();
@@ -39,7 +39,7 @@ class FTP {
         try {
             const client = this.getClient();
             await client.connect(this.config);
-            client
+            await client
                 .fastPut(localFileName, remoteFileName, {
                 step: function (total_transferred, chunk, total) {
                     if (total_transferred < total) {
@@ -82,9 +82,9 @@ class FTP {
     async getFile(remoteFileName, localFileName) {
         let complete = false;
         try {
-            this.getClient()
-                .fastGet(remoteFileName, localFileName)
-                .catch((err) => {
+            const client = this.getClient();
+            await client.connect(this.config);
+            await client.fastGet(remoteFileName, localFileName).catch((err) => {
                 console.error(err.message);
             });
             complete = true;
