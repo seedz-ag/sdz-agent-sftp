@@ -64,7 +64,9 @@ class FTP {
                     }
                 },
             })
-                .then(client.end)
+                .then(() => {
+                client.end();
+            })
                 .catch((err) => {
                 console.log(err);
                 sdz_agent_common_1.Logger.error(`ERRO AO ENVIAR ${remoteFileName} FTP.`);

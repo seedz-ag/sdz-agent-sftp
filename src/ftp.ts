@@ -72,7 +72,9 @@ class FTP implements FTPInterface {
             }
           },
         })
-        .then(client.end)
+        .then(() => {
+          client.end();
+        })
         .catch((err: any) => {
           console.log(err);
           Logger.error(`ERRO AO ENVIAR ${remoteFileName} FTP.`);
