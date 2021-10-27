@@ -75,7 +75,7 @@ class FTP implements FTPInterface {
         .then(() => {
           client.end();
         })
-        .catch((err: any) => {
+        .catch((err: TypeError) => {
           console.log(err);
           Logger.error(`ERRO AO ENVIAR ${remoteFileName} FTP.`);
           process.exit(1);
@@ -93,10 +93,18 @@ class FTP implements FTPInterface {
   ): Promise<boolean> {
     let complete = false;
     try {
+
+      
       const client = this.getClient();
       await client.connect(this.config);
-      await client.fastGet(remoteFileName, localFileName).catch((err: any) => {
-        console.error(err.message);
+      await client.fastGet(remoteFileName, localFileName, {
+        step: function (total_transferred, chunk, total) {
+      }})
+      .then(() => {
+          client.end();
+      })
+      .catch((err: TypeError) => {
+          console.error(err.message);
       });
       complete = true;
     } catch (e) {

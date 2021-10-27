@@ -84,7 +84,14 @@ class FTP {
         try {
             const client = this.getClient();
             await client.connect(this.config);
-            await client.fastGet(remoteFileName, localFileName).catch((err) => {
+            await client.fastGet(remoteFileName, localFileName, {
+                step: function (total_transferred, chunk, total) {
+                }
+            })
+                .then(() => {
+                client.end();
+            })
+                .catch((err) => {
                 console.error(err.message);
             });
             complete = true;
