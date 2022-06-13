@@ -112,5 +112,28 @@ class FTP implements FTPInterface {
     }
     return complete;
   }
+
+  async renameFile(
+    remoteFileName: string,
+    newRemoteFileName: string
+  ): Promise<boolean> {
+    let complete = false;
+    try {
+      const client = this.getClient();
+      await client.connect(this.config);
+      await client.rename(remoteFileName, newRemoteFileName)
+      .then(() => {
+          client.end();
+      })
+      .catch((err: TypeError) => {
+          console.error(err.message);
+      });
+      complete = true;
+    } catch (e) {
+      throw new Error();
+    }
+    return complete;
+  }
+
 }
 export default FTP;
