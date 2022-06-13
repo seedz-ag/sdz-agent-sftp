@@ -101,5 +101,24 @@ class FTP {
         }
         return complete;
     }
+    async renameFile(remoteFileName, newRemoteFileName) {
+        let complete = false;
+        try {
+            const client = this.getClient();
+            await client.connect(this.config);
+            await client.rename(remoteFileName, newRemoteFileName)
+                .then(() => {
+                client.end();
+            })
+                .catch((err) => {
+                console.error(err.message);
+            });
+            complete = true;
+        }
+        catch (e) {
+            throw new Error();
+        }
+        return complete;
+    }
 }
 exports.default = FTP;

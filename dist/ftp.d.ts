@@ -7,5 +7,6 @@ declare class FTP implements FTPInterface {
     getClient(): SFTPClient;
     sendFile(localFileName: string, remoteFileName: string): Promise<boolean>;
     getFile(remoteFileName: string, localFileName: string): Promise<boolean>;
+    renameFile(remoteFileName: string, newRemoteFileName: string): Promise<boolean>;
 }
 export default FTP;
