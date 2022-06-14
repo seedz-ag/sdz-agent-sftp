@@ -22,13 +22,13 @@ class FTP {
                 return true;
             })
                 .catch((e) => {
-                throw new Error();
+                throw e;
             });
             return true;
         }
         catch (e) {
             sdz_agent_common_1.Logger.error("CONFIGURAÇÕES FTP INVÁLIDAS.");
-            process.exit(1);
+            throw e;
         }
     }
     getClient() {
@@ -68,14 +68,13 @@ class FTP {
                 client.end();
             })
                 .catch((err) => {
-                console.log(err);
                 sdz_agent_common_1.Logger.error(`ERRO AO ENVIAR ${remoteFileName} FTP.`);
-                process.exit(1);
+                throw err;
             });
             complete = true;
         }
         catch (e) {
-            throw new Error();
+            throw e;
         }
         return complete;
     }
@@ -84,20 +83,20 @@ class FTP {
         try {
             const client = this.getClient();
             await client.connect(this.config);
-            await client.fastGet(remoteFileName, localFileName, {
-                step: function (total_transferred, chunk, total) {
-                }
+            await client
+                .fastGet(remoteFileName, localFileName, {
+                step: function (total_transferred, chunk, total) { },
             })
                 .then(() => {
                 client.end();
             })
                 .catch((err) => {
-                console.error(err.message);
+                throw err;
             });
             complete = true;
         }
         catch (e) {
-            throw new Error();
+            throw e;
         }
         return complete;
     }
@@ -106,17 +105,18 @@ class FTP {
         try {
             const client = this.getClient();
             await client.connect(this.config);
-            await client.rename(remoteFileName, newRemoteFileName)
+            await client
+                .rename(remoteFileName, newRemoteFileName)
                 .then(() => {
                 client.end();
             })
                 .catch((err) => {
-                console.error(err.message);
+                throw err;
             });
             complete = true;
         }
         catch (e) {
-            throw new Error();
+            throw e;
         }
         return complete;
     }

@@ -23,12 +23,12 @@ class FTP implements FTPInterface {
           return true;
         })
         .catch((e: any) => {
-          throw new Error();
+          throw e;
         });
       return true;
     } catch (e) {
       Logger.error("CONFIGURAÇÕES FTP INVÁLIDAS.");
-      process.exit(1);
+      throw e;
     }
   }
 
@@ -76,13 +76,12 @@ class FTP implements FTPInterface {
           client.end();
         })
         .catch((err: TypeError) => {
-          console.log(err);
           Logger.error(`ERRO AO ENVIAR ${remoteFileName} FTP.`);
-          process.exit(1);
+          throw err;
         });
       complete = true;
     } catch (e) {
-      throw new Error();
+      throw e;
     }
     return complete;
   }
@@ -93,22 +92,21 @@ class FTP implements FTPInterface {
   ): Promise<boolean> {
     let complete = false;
     try {
-
-      
       const client = this.getClient();
       await client.connect(this.config);
-      await client.fastGet(remoteFileName, localFileName, {
-        step: function (total_transferred, chunk, total) {
-      }})
-      .then(() => {
+      await client
+        .fastGet(remoteFileName, localFileName, {
+          step: function (total_transferred, chunk, total) {},
+        })
+        .then(() => {
           client.end();
-      })
-      .catch((err: TypeError) => {
-          console.error(err.message);
-      });
+        })
+        .catch((err: TypeError) => {
+          throw err;
+        });
       complete = true;
     } catch (e) {
-      throw new Error();
+      throw e;
     }
     return complete;
   }
@@ -121,19 +119,19 @@ class FTP implements FTPInterface {
     try {
       const client = this.getClient();
       await client.connect(this.config);
-      await client.rename(remoteFileName, newRemoteFileName)
-      .then(() => {
+      await client
+        .rename(remoteFileName, newRemoteFileName)
+        .then(() => {
           client.end();
-      })
-      .catch((err: TypeError) => {
-          console.error(err.message);
-      });
+        })
+        .catch((err: TypeError) => {
+          throw err;
+        });
       complete = true;
     } catch (e) {
-      throw new Error();
+      throw e;
     }
     return complete;
   }
-
 }
 export default FTP;
