@@ -5,7 +5,8 @@
   "license": "APACHE",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsc --declaration"
+    "build": "tsc --declaration",
+    "prepare": "husky install"
   },
   "dependencies": {
     "chalk": "^4.1.2",
@@ -20,6 +21,7 @@
     "@types/cli-progress": "^3.9.2",
     "@types/node": "^16.6.1",
     "@types/shelljs": "^0.8.9",
-    "@types/ssh2-sftp-client": "^5.3.2"
+    "@types/ssh2-sftp-client": "^5.3.2",
+    "husky": "7.0.4"
   }
 }
