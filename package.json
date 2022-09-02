@@ -4,6 +4,7 @@
   "main": "./dist/index.js",
   "license": "APACHE",
   "types": "dist/index.d.ts",
+  "private": true,
   "scripts": {
     "build": "tsc --declaration",
     "prepare": "husky install"
