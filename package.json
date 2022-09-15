@@ -4,8 +4,10 @@
   "main": "./dist/index.js",
   "license": "APACHE",
   "types": "dist/index.d.ts",
+  "private": true,
   "scripts": {
-    "build": "tsc --declaration"
+    "build": "tsc --declaration",
+    "prepare": "husky install"
   },
   "dependencies": {
     "chalk": "^4.1.2",
@@ -15,9 +17,16 @@
     "ssh2-sftp-client": "^7.0.1"
   },
   "devDependencies": {
+    "@commitlint/cli": "8.2.0",
+    "@commitlint/config-conventional": "8.2.0",
+    "@semantic-release/changelog": "^6.0.1",
+    "@semantic-release/git": "^10.0.1",
     "@types/cli-progress": "^3.9.2",
     "@types/node": "^16.6.1",
     "@types/shelljs": "^0.8.9",
-    "@types/ssh2-sftp-client": "^5.3.2"
+    "@types/ssh2-sftp-client": "^5.3.2",
+    "conventional-changelog-conventionalcommits": "^5.0.0",
+    "husky": "7.0.4",
+    "semantic-release": "^19.0.5"
   }
 }
