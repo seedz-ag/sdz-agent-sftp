@@ -11,8 +11,8 @@
   "dependencies": {
     "chalk": "^4.1.2",
     "cli-progress": "^3.9.1",
-    "sdz-agent-common": "https://github.com/seedz-ag/sdz-agent-common.git#bugfix/#24905",
-    "sdz-agent-types": "https://github.com/seedz-ag/sdz-agent-types.git#bugfix/#24905",
+    "sdz-agent-common": "https://github.com/seedz-ag/sdz-agent-common.git",
+    "sdz-agent-types": "https://github.com/seedz-ag/sdz-agent-types.git",
     "ssh2-sftp-client": "^7.0.1"
   },
   "devDependencies": {
