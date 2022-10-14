@@ -1,8 +1,6 @@
-import SFTPClient from "ssh2-sftp-client";
-
 import { ConfigAuthFTP, FTPInterface } from "sdz-agent-types";
-
 import { Logger, ProgressBar } from "sdz-agent-common";
+import SFTPClient, { FileInfo } from "ssh2-sftp-client";
 
 class FTP implements FTPInterface {
   private config: ConfigAuthFTP;
@@ -46,7 +44,7 @@ class FTP implements FTPInterface {
       await client.connect(this.config);
       await client
         .fastPut(localFileName, remoteFileName, {
-          step: function (total_transferred, chunk, total) {
+          step: function (total_transferred: any, chunk: any, total: any) {
             if (total_transferred < total) {
               if (!process.env.COMMAND_LINE) {
                 ProgressBar.update(localFileName, total_transferred, {
@@ -96,7 +94,7 @@ class FTP implements FTPInterface {
       await client.connect(this.config);
       await client
         .fastGet(remoteFileName, localFileName, {
-          step: function (total_transferred, chunk, total) {},
+          step: function (total_transferred: any, chunk: any, total: any) {},
         })
         .then(() => {
           client.end();
@@ -132,6 +130,12 @@ class FTP implements FTPInterface {
       throw e;
     }
     return complete;
+  }
+
+  async list(path: string): Promise<FileInfo[]> {
+      const client = this.getClient();
+      await client.connect(this.config);
+      return client.list(path);
   }
 }
 export default FTP;

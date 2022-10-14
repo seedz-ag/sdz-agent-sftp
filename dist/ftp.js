@@ -3,8 +3,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const ssh2_sftp_client_1 = __importDefault(require("ssh2-sftp-client"));
 const sdz_agent_common_1 = require("sdz-agent-common");
+const ssh2_sftp_client_1 = __importDefault(require("ssh2-sftp-client"));
 class FTP {
     constructor(config) {
         this.config = config;
@@ -119,6 +119,11 @@ class FTP {
             throw e;
         }
         return complete;
+    }
+    async list(path) {
+        const client = this.getClient();
+        await client.connect(this.config);
+        return client.list(path);
     }
 }
 exports.default = FTP;
